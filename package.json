@@ -1,0 +1,8 @@
+{
+  "name": "react-router",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:karingula/react-router.git",
+  "author": "karingula <karingula@users.noreply.github.com>",
+  "license": "MIT"
+}
