@@ -23,7 +23,7 @@ var config = {
       }
     ]
   },
-  mode: "development",
+  mode: "development"
 };
 
 module.exports = config;

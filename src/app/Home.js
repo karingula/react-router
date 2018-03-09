@@ -23,7 +23,7 @@ const Topic = ({ match }) => console.log('match', match) || (
   </div>
 )
 
-const Topics = ({ match }) => (
+const Topics = ({ match }) => console.log('match', match) || (
   <div>
     <h2>The Course Topics</h2>
     <ul>
@@ -32,7 +32,7 @@ const Topics = ({ match }) => (
       <li><Link to={`${match.url}/props-v-state`}>Props v State</Link></li>
     </ul>
 
-    <Route path="/topics/:topicId" component={Topic}/>
+    <Route path={`${match.url}/:topicId`} component={Topic}/>
     <Route exact path={`${match.url}`} render={() => (
       <h3>Please select a topic</h3>
     )}/>
@@ -48,14 +48,14 @@ export class App extends Component {
           <ul>
             <li><Link to="/">Home</Link></li>
             <li><Link to="/about">About</Link></li>
-            <li><Link to="/topics">Topics</Link></li>
+            <li><Link to="/courses">Courses</Link></li>
           </ul>
 
           <hr/>
 
           <Route  exact path="/" component={Home} />
           <Route path="/about" component={About}/>
-          <Route path="/topics" component={Topics}/>
+          <Route path="/courses" component={Topics}/>
         </div>
       </Router>
     )
