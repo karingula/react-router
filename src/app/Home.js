@@ -17,13 +17,13 @@ const About = () => (
   </div>
 )
 
-const Topic = ({ match }) => console.log('match', match) || (
+const Topic = ({ match }) => (
   <div>
     <h3>{match.params.topicId}</h3>
   </div>
 )
 
-const Topics = ({ match }) => console.log('match', match) || (
+const Topics = ({ match }) => (
   <div>
     <h2>The Course Topics</h2>
     <ul>
