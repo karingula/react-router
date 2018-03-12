@@ -2,32 +2,92 @@ import React, { Component } from 'react';
 import {
   BrowserRouter as Router,
   Link,
-  Route
+  Route,
+  Redirect,
+  withRouter
 } from 'react-router-dom';
 
-const Child = ({ match }) => console.log('match-property', match) || (
-  <div>
-    <h2>ID: {match.params.id}</h2>
-  </div>
+const fakeAuth = {
+  isAuthenticated: false,
+  authenticate(cb) {
+    this.isAuthenticated = true
+    setTimeout(cb, 1000)// fake async
+  },
+  signout(cb) {
+    this.isAuthenticated = false
+    setTimeout(cb, 1000)
+  }
+}
+
+const Public = () => <h3>Public</h3>;
+const Protected = () => <h3>Protected</h3>;
+
+class Login extends React.Component {
+  state = {
+    redirectToReferrer: false
+  }
+  login = () => {
+    fakeAuth.authenticate(() => {
+      this.setState(() => ({
+        redirectToReferrer: true
+      }))
+    })
+  }
+  render() {
+    console.log(this.props)
+    const { redirectToReferrer } = this.state
+    const { from } = this.props.location.state || { from: { pathname: '/' } }
+    console.log(from)
+    if (redirectToReferrer === true) {
+      return (
+        <Redirect to={from}/>
+      )
+    }
+    return (
+      <div>
+        <p> You must log in to view the page at </p>
+        <button onClick={this.login}> Login </button>
+      </div>
+    );
+  }
+}
+
+const PrivateRoute = ({ component: Component, ...rest }) => (
+  <Route {...rest} render={(props) => (
+    fakeAuth.isAuthenticated === true
+    ? <Component {...props}/>
+    : <Redirect to={{
+      pathname: "/login",
+      state: { from: props.location }
+    }} />
+  )}/>
 )
+
+const AuthButton = withRouter(({ history }) => (
+  fakeAuth.isAuthenticated ===true
+  ? <p>
+      Welcome! <button onClick={() => {
+        fakeAuth.signout(() => history.push('/'))
+      }}>Sign Out</button>
+    </p>
+  : <p> You are not logged in.</p>
+))
 
 export class App extends Component {
   render() {
     return (
       <Router>
         <div>
-          <h2>Accounts</h2>
+          <AuthButton />
           <ul>
-            <li><Link to="/netflix">Netflix</Link></li>
-            <li><Link to="/zillow">Zillow Group</Link></li>
-            <li><Link to="/yahoo">Yahoo</Link></li>
-            <li><Link to="/modus-create">Modus Create</Link></li>
+            <li><Link to="/public">Public</Link></li>
+            <li><Link to = "/protected">Protected</Link></li>
           </ul>
-
-          <Route path='/:id' component={Child}/>
+          <Route path="/public" component={Public}/>
+          <Route path="/login" component={Login}/>
+          <PrivateRoute path="/protected" component={Protected}/>
         </div>
       </Router>
-
-    )
+    );
   }
 }
