@@ -11,11 +11,11 @@ const fakeAuth = {
   isAuthenticated: false,
   authenticate(cb) {
     this.isAuthenticated = true
-    setTimeout(cb, 1000)// fake async
+    setTimeout(cb, 100)// fake async
   },
   signout(cb) {
     this.isAuthenticated = false
-    setTimeout(cb, 1000)
+    setTimeout(cb, 100)
   }
 }
 
@@ -45,7 +45,7 @@ class Login extends React.Component {
     }
     return (
       <div>
-        <p> You must log in to view the page at </p>
+        <p> You must log in to view the page at {from.pathname}</p>
         <button onClick={this.login}> Login </button>
       </div>
     );
